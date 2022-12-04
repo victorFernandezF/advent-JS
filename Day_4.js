@@ -1,45 +1,27 @@
 function fitsInOneBox(boxes) {
-    let result = false;
-    let newBoxes = simplifyArray(boxes);
-    let sortedArray = sortArray(newBoxes);
-    for (let i = 0; i < sortedArray.length - 1; i++) {
-        result = doesBoxFitInAnotherBox(sortedArray[i].toString(), sortedArray[i + 1].toString());
-        if (!result)
+    let sortedBoxes = sortBoxes(boxes);
+    for (let i = 0; i < sortedBoxes.length - 1; i++) {
+        if (sortedBoxes[i].l >= sortedBoxes[i + 1].l)
             return false;
-    }
-    return result;
-}
-
-function doesBoxFitInAnotherBox(item1, item2){
-    let i = 0;
-    while (i < 2) {
-        console.log(item1[i],">=", item2[i])
-        if (item1[i] >= item2[i])
+        if (sortedBoxes[i].w >= sortedBoxes[i + 1].w)
             return false;
-        i++;
+        if (sortedBoxes[i].h >= sortedBoxes[i + 1].h)
+            return false;
     }
     return true;
-}
+} 
 
-function sortArray(arrayToSort){
-    let sortedArray = arrayToSort.sort(function(a, b){return a - b});
-    return sortedArray;
+function sortBoxes(boxes){
+    boxes.sort(function(a, b) { return a.l - b.l && a.w - b.w && a.h - b.h });
+    return boxes;
+    //console.log(boxes)
 }
-
-function simplifyArray(boxes){
-    let newArray = [];
-    boxes.forEach(element => {
-        newArray.push(Number(`${element.l}${element.w}${element.h}`));
-    });
-    return newArray;
-}
-
 
 //    TESTS 
 const boxes = [
     { l: 1, w: 1, h: 1 },
-    { l: 2, w: 4, h: 1 },
-    { l: 5, w: 6, h: 21 }
+    { l: 3, w: 3, h: 3 },
+    { l: 2, w: 2, h: 2 }
 ]
 
-console.log(fitsInOneBox(boxes)) // false
+console.log(fitsInOneBox(boxes)) // true
